@@ -332,6 +332,8 @@
       "yoda": [
         2,
         "never"
-      ]
+      ],
+      "react/destructuring-assignment": [0, "always"],
+      "react/jsx-props-no-spreading": 0
     }
   }
