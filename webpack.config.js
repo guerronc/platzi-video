@@ -14,6 +14,26 @@ module.exports = {
   resolve: {
     extensions: ['.js', '.jsx'],
   },
+  optimization: {
+    splitChunks: {
+      chunks: 'async',
+      name: true,
+      cacheGroups: {
+        vendors: {
+          name: 'vendors',
+          chunks: 'all',
+          reuseExistingChunk: true,
+          priority: 1,
+          filename: 'assets/vendor.js',
+          enforce: true,
+          test(module, chunks) {
+            const name = module.nameForCondition && module.nameForCondition();
+            return chunks.some((chunk) => chunk.name !== 'vendor' && /[\\/]node_modules[\\/]/.test(name));
+          },
+        },
+      },
+    },
+  },
   module: {
     rules: [
       {
@@ -24,7 +44,7 @@ module.exports = {
           loader: 'eslint-loader',
           options: {
             fix: true,
-          }
+          },
         },
       },
       {
@@ -68,6 +88,7 @@ module.exports = {
     historyApiFallback: true,
   },
   plugins: [
+    new webpack.HotModuleReplacementPlugin(),
     new webpack.LoaderOptionsPlugin({
       options: {
         postcss: [
