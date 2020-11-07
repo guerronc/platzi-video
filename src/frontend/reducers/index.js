@@ -1,8 +1,4 @@
 const reducer = (state, action) => {
-
-  console.log('Actions: ', action);
-  console.log('State:', state);
-
   switch (action.type) {
     case 'SET_FAVORITE':
       return {

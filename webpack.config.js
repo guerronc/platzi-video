@@ -1,16 +1,38 @@
-const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const path = require("path");
+const webpack = require("webpack");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const CompressionWebpackPlugin = require("compression-webpack-plugin");
+const TerserPlugin = require("terser-webpack-plugin");
+
+require("dotenv").config();
+
+const isDev = process.env.ENV === "development";
+const entry = ["./src/frontend/index.js"];
+
+if (isDev) {
+  entry.push(
+    "webpack-hot-middleware/client?path=/__webpack_hmr&timeout=2000&reload=true"
+  );
+}
 
 module.exports = {
-  entry: './src/index.js',
+  entry,
   output: {
-    path: path.resolve(__dirname, 'dist'),
-    filename: 'bundle.js',
-    publicPath: '/',
+    path: path.resolve(__dirname, "src/server/public"),
+    filename: "assets/app.js",
+    publicPath: "/",
   },
+  mode: process.env.ENV,
   resolve: {
-    extensions: ['.js', '.jsx'],
+    extensions: [".js", ".jsx"],
+  },
+  optimization: {
+    minimize: true,
+    minimizer: [
+      new TerserPlugin({
+        test: /\.js(\?.*)?$/i,
+      }),
+    ],
   },
   module: {
     rules: [
@@ -18,13 +40,7 @@ module.exports = {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
         use: {
-          loader: 'babel-loader',
-        },
-      },
-      {
-        test: /\.html$/,
-        use: {
-          loader: 'html-loader',
+          loader: "babel-loader",
         },
       },
       {
@@ -33,17 +49,17 @@ module.exports = {
           {
             loader: MiniCssExtractPlugin.loader,
           },
-          'css-loader',
-          'sass-loader',
+          "css-loader",
+          "sass-loader",
         ],
       },
       {
         test: /\.(png|gif|jpg)$/,
         use: [
           {
-            loader: 'file-loader',
+            loader: "file-loader",
             options: {
-              name: 'assets/[hash].[ext]',
+              name: "assets/[hash].[ext]",
             },
           },
         ],
@@ -54,12 +70,15 @@ module.exports = {
     historyApiFallback: true,
   },
   plugins: [
-    new HtmlWebpackPlugin({
-      template: './public/index.html',
-      filename: './index.html',
-    }),
+    isDev ? new webpack.HotModuleReplacementPlugin() : () => {},
+    isDev
+      ? () => {}
+      : new CompressionWebpackPlugin({
+          test: /\.js$|\.css$/,
+          filename: "[path][base].gz",
+        }),
     new MiniCssExtractPlugin({
-      filename: 'assets/[name].css',
+      filename: "assets/app.css",
     }),
   ],
 };
