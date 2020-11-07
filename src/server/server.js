@@ -18,6 +18,10 @@ import Layout from '../frontend/components/Layout';
 
 import getManifest from './getManifest';
 
+const webpackDevMiddleware = require('webpack-dev-middleware');
+const webpackHotMiddleware = require('webpack-hot-middleware');
+const webpackConfig = require('../../webpack.config');
+
 const app = express();
 
 dotenv.config();
@@ -25,10 +29,6 @@ dotenv.config();
 const { ENV, PORT } = process.env;
 
 if (ENV === 'development') {
-  const webpackConfig = require('../../webpack.config');
-  const webpackDevMiddleware = require('webpack-dev-middleware');
-  const webpackHotMiddleware = require('webpack-hot-middleware');
-
   const compiler = webpack(webpackConfig);
   const serverConfig = {};
   app.use(webpackDevMiddleware(compiler, serverConfig));

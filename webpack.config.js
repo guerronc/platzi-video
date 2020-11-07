@@ -39,9 +39,9 @@ module.exports = {
           chunks: 'all',
           reuseExistingChunk: true,
           priority: 1,
-          filename: isDev
-            ? 'assets/vendor.js'
-            : 'assets/vendor-[contentHash].js',
+          filename: isDev ?
+            'assets/vendor.js' :
+            'assets/vendor-[contentHash].js',
           enforce: true,
           test(module, chunks) {
             const name = module.nameForCondition && module.nameForCondition();
@@ -97,12 +97,12 @@ module.exports = {
   },
   plugins: [
     isDev ? new webpack.HotModuleReplacementPlugin() : () => {},
-    isDev
-      ? () => {}
-      : new CompressionWebpackPlugin({
-          test: /\.js$|\.css$/,
-          filename: '[path][base].gz',
-        }),
+    isDev ?
+      () => {} :
+      new CompressionWebpackPlugin({
+        test: /\.js$|\.css$/,
+        filename: '[path][base].gz',
+      }),
     isDev ? () => {} : new ManifestPugin(),
     new MiniCssExtractPlugin({
       filename: isDev ? 'assets/app.css' : 'assets/app-[hash].css',
