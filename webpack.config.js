@@ -3,6 +3,7 @@ const webpack = require("webpack");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CompressionWebpackPlugin = require("compression-webpack-plugin");
 const TerserPlugin = require("terser-webpack-plugin");
+const ManifestPugin = require("webpack-manifest-plugin");
 
 require("dotenv").config();
 
@@ -19,7 +20,7 @@ module.exports = {
   entry,
   output: {
     path: path.resolve(__dirname, "src/server/public"),
-    filename: "assets/app.js",
+    filename: isDev ? "assets/app.js" : "assets/app-[hash].js",
     publicPath: "/",
   },
   mode: process.env.ENV,
@@ -28,11 +29,28 @@ module.exports = {
   },
   optimization: {
     minimize: true,
-    minimizer: [
-      new TerserPlugin({
-        test: /\.js(\?.*)?$/i,
-      }),
-    ],
+    minimizer: [new TerserPlugin()],
+    splitChunks: {
+      chunks: "async",
+      name: true,
+      cacheGroups: {
+        vendors: {
+          name: "vendor",
+          chunks: "all",
+          reuseExistingChunk: true,
+          priority: 1,
+          filename: isDev ? "assets/vendor.js" : "assets/vendor-[contentHash].js",
+          enforce: true,
+          test(module, chunks) {
+            const name = module.nameForCondition && module.nameForCondition();
+            return chunks.some(
+              (chunk) =>
+                chunk.name !== "vendor" && /[\\/]node_modules[\\/]/.test(name)
+            );
+          },
+        },
+      },
+    },
   },
   module: {
     rules: [
@@ -77,8 +95,9 @@ module.exports = {
           test: /\.js$|\.css$/,
           filename: "[path][base].gz",
         }),
+    isDev ? () => {} : new ManifestPugin(),
     new MiniCssExtractPlugin({
-      filename: "assets/app.css",
+      filename: isDev ? "assets/app.css" : "assets/app-[hash].css",
     }),
   ],
 };
