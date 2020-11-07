@@ -7,7 +7,6 @@ import '../assets/styles/components/Login.scss';
 import { loginRequest } from '../actions';
 
 const Login = (props) => {
-
   const [form, setValues] = useState({
     email: '',
   });
@@ -71,7 +70,9 @@ const Login = (props) => {
           </div>
         </section>
         <p className='login__container--register'>
-          No tienes ninguna cuenta {' '}
+          No tienes ninguna cuenta
+          {' '}
+          {' '}
           <Link to='/register'>Regístrate</Link>
         </p>
       </section>

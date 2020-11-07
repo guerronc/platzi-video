@@ -5,7 +5,6 @@ import { registerRequest } from '../actions';
 import '../assets/styles/components/Register.scss';
 
 const Register = (props) => {
-
   const [form, setValues] = useState({
     email: '',
     name: '',
@@ -66,4 +65,3 @@ const mapDispatchToProps = {
 };
 
 export default connect(null, mapDispatchToProps)(Register);
-

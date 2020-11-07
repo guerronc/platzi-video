@@ -48,15 +48,12 @@ const Header = (props) => {
   );
 };
 
-const mapStateToProps = (state) => {
-  return {
-    user: state.user,
-  };
-};
+const mapStateToProps = (state) => ({
+  user: state.user,
+});
 
 const mapDispatchToProps = {
   logoutRequest,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Header);
-
