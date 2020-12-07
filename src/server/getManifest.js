@@ -4,7 +4,7 @@ const getManifest = () => {
   try {
     return JSON.parse(fs.readFileSync(`${__dirname}/public/manifest.json`));
   } catch (error) {
-    return console.log(error);
+    return console.error(error);
   }
 };
 

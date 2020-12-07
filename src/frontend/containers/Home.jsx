@@ -5,42 +5,46 @@ import Search from '../components/Search';
 import Categories from '../components/Categories';
 import Carousel from '../components/Carousel';
 import CarouselItem from '../components/CarouselItem';
+import Header from '../components/Header';
 import '../assets/styles/app.scss';
 
-const Home = ({ mylist, trends, originals }) => (
-  <>
-    <Search isHome />
-    {mylist.length > 0 && (
-      <Categories title='Mi lista'>
-        <Carousel>
-          {mylist.map((item) => (
-            <CarouselItem key={item.id} {...item} isList />
-          ))}
-        </Carousel>
-      </Categories>
-    )}
+const Home = ({ mylist, trends, originals }) => {
+  return (
+    <>
+      <Header />
+      <Search isHome />
+      {mylist.length > 0 && (
+        <Categories title='Mi lista'>
+          <Carousel>
+            {mylist.map((item) => (
+              <CarouselItem key={item._id} {...item} isList />
+            ))}
+          </Carousel>
+        </Categories>
+      )}
 
-    {trends.length > 0 && (
-      <Categories title='Tendencias'>
-        <Carousel>
-          {trends.map((item) => (
-            <CarouselItem key={item.id} {...item} isList={false} />
-          ))}
-        </Carousel>
-      </Categories>
-    )}
+      {trends.length > 0 && (
+        <Categories title='Tendencias'>
+          <Carousel>
+            {trends.map((item) => (
+              <CarouselItem key={item._id} {...item} isList={false} />
+            ))}
+          </Carousel>
+        </Categories>
+      )}
 
-    {originals.length > 0 && (
-      <Categories title='Originales de platzi Videos'>
-        <Carousel>
-          {originals.map((item) => (
-            <CarouselItem key={item.id} {...item} isList={false} />
-          ))}
-        </Carousel>
-      </Categories>
-    )}
-  </>
-);
+      {originals.length > 0 && (
+        <Categories title='Originales de platzi Videos'>
+          <Carousel>
+            {originals.map((item) => (
+              <CarouselItem key={item._id} {...item} isList={false} />
+            ))}
+          </Carousel>
+        </Categories>
+      )}
+    </>
+  );
+};
 
 const mapStateToProps = (state) => ({
   mylist: state.mylist,

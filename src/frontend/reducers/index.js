@@ -8,7 +8,8 @@ const reducer = (state, action) => {
     case 'DELETE_FAVORITE':
       return {
         ...state,
-        mylist: state.mylist.filter((items) => items.id !== action.payload),
+        mylist:
+          state.mylist.filter((item) => item._id !== action.payload) || [],
       };
     case 'LOGIN_REQUEST':
       return {
@@ -28,8 +29,9 @@ const reducer = (state, action) => {
     case 'GET_VIDEO_SOURCE':
       return {
         ...state,
-        playing: state.trends.find((item) => item.id === Number(action.payload)) ||
-          state.original.find((item) => item.id === Number(action.payload)) ||
+        playing:
+          state.trends.find((item) => item._id === Number(action.payload)) ||
+          state.original.find((item) => item._id === Number(action.payload)) ||
           [],
       };
     default:
